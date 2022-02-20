@@ -1,0 +1,37 @@
+# .env
+frontend/dist
+frontend/node_modules
+frontend/.husky
+frontend/documentation
+frontend/.next
+
+frontend/dist/
+frontend/node_modules/
+frontend/.husky/
+frontend/documentation/
+frontend/.next/
+
+./frontend/dist
+./frontend/node_modules
+./frontend/.husky
+./frontend/documentation
+./frontend/.next
+
+# .env
+backend/dist
+backend/node_modules
+backend/.husky
+backend/documentation
+backend/.next
+
+backend/dist/
+backend/node_modules/
+backend/.husky/
+backend/documentation/
+backend/.next/
+
+./backend/dist
+./backend/node_modules
+./backend/.husky
+./backend/documentation
+./backend/.next

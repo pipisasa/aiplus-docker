@@ -1,0 +1,127 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:12.0-alpine
+    networks:
+      - my-network
+    environment:
+      POSTGRES_DB: aiplus
+      POSTGRES_USER: aiplus
+      POSTGRES_PASSWORD: aiplus
+    ports:
+      - 5000:5432
+
+  backend:
+    # image: pipisasa/aiplus-backend:1.0.0
+    container_name: aiplus_backend
+    build:
+      context: .
+      target: builder
+      dockerfile: ./backend/Dockerfile
+      cache_from:
+        - node:17-alpine
+    depends_on:
+      - db
+    networks:
+      - my-network
+    restart: unless-stopped
+    entrypoint: /usr/src/app/wsgi-entrypoint.sh
+    environment:
+      DATABASE_URL: postgresql://aiplus:aiplus@db:5432/aiplus
+      NODE_ENV: production
+      PORT: 3000
+    ports:
+      - 4466:3000
+
+  frontend:
+    # image: pipisasa/aiplus-frontend:1.0.0
+    container_name: aiplus_frontend
+    build:
+      context: .
+      target: builder
+      dockerfile: ./frontend/Dockerfile
+      cache_from:
+        - node:16.14-alpine
+    depends_on:
+      - backend
+    networks:
+      - my-network
+    restart: unless-stopped
+    # entrypoint: /usr/src/app/wsgi-entrypoint.sh
+    environment:
+      BLITZ_PUBLIC_API_URL: http://backend:3000
+      BLITZ_PUBLIC_API_MEDIA_URL: http://backend:3000
+    ports:
+      - 3000:3000
+
+networks:
+  my-network:
+
+volumes:
+  postgres_data:
+  static_volume:
+
+  # frontend:
+  #   restart: always
+  #   build:
+  #     context: ./frontend
+  #   ports:
+  #     - "3000:3000"
+  #   container_name: frontend
+  #   stdin_open: true
+  #   volumes:
+  #     - ./frontend:/usr/src/app
+  #     - /usr/src/app/node_modules
+  #   networks:
+  #     - my-network
+  #   env_file:
+  #     - ./frontend/.env
+  #   depends_on:
+  #     - db
+  #   command: ["yarn", "prod"]
+
+  # backend:
+  #   restart: unless-stopped
+  #   build:
+  #     context: .
+  #     dockerfile: docker/backend/Dockerfile
+  #   volumes:
+  #     - static_volume:/app/backend/src/staticfiles
+  #   entrypoint: /app/docker/backend/wsgi-entrypoint.sh
+  #   networks:
+  #     - my-network
+  #   depends_on:
+  #     - db
+  #   env_file:
+  #     - ./backend/src/.env
+  #   ports:
+  #     - 8000:8000
+
+  # nginx:
+  #     restart: unless-stopped
+  #     build:
+  #       context: .
+  #       dockerfile: ./docker/nginx/Dockerfile
+  #     ports:
+  #       - 80:80
+  #       # - 443:443
+  #     volumes:
+  #       - ./docker/nginx/dev:/etc/nginx/conf.d
+  #       - static_volume:/app/backend/src/staticfiles
+  #       # - ./docker/nginx/certbot/conf:/etc/letsencrypt
+  #       # - ./docker/nginx/certbot/www:/var/www/certbot
+  #     networks:
+  #       - my-network
+  #     depends_on:
+  #       - db
+  #       - backend
+
+#     certbot:
+#       image: certbot/certbot
+#       restart: unless-stopped
+#       volumes:
+#         - ./docker/nginx/certbot/conf:/etc/letsencrypt
+#         - ./docker/nginx/certbot/www:/var/www/certbot
+#       entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
