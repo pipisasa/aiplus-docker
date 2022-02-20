@@ -22,8 +22,11 @@ cd aiplus-docker
 # Clone Backend
 git clone git@github.com:pipisasa/aiplus-nestjs.git backend
 
+
 # Checkout to docker branch
+cd backend
 git checkout -b docker origin/docker
+cd ..
 ```
 
 <br/>
@@ -35,7 +38,9 @@ git checkout -b docker origin/docker
 git clone git@github.com:pipisasa/aiplus-blitz.git frontend
 
 # Checkout to docker branch
+cd frontend
 git checkout -b docker origin/docker
+cd ..
 ```
 
 ## Docker Compose
