@@ -34,7 +34,7 @@ cd ..
 #### Clone [Frontend](https://github.com/pipisasa/aiplus-blitz)
 
 ```bash
-# Clone Backend
+# Clone Frontend
 git clone git@github.com:pipisasa/aiplus-blitz.git frontend
 
 # Checkout to docker branch
