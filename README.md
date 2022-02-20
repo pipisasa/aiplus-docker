@@ -32,7 +32,7 @@ git checkout -b docker origin/docker
 
 ```bash
 # Clone Backend
-git clone git@github.com:pipisasa/aiplus-blitz.git backend
+git clone git@github.com:pipisasa/aiplus-blitz.git frontend
 
 # Checkout to docker branch
 git checkout -b docker origin/docker
