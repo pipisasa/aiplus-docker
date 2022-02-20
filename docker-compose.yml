@@ -42,7 +42,7 @@ services:
       target: builder
       dockerfile: ./frontend/Dockerfile
       cache_from:
-        - node:16.14-alpine
+        - node:16.14
     depends_on:
       - backend
     networks:
